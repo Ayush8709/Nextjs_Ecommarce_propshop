@@ -1,0 +1,144 @@
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #333;
+    color: white;
+    position: relative;
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+    /* Change background on hover */
+}
+
+.navbar:hover {
+    background-color: #444;
+    /* Darker shade on hover */
+}
+
+.logo {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+    /* Add a scaling effect */
+}
+
+.logo:hover {
+    transform: scale(1.1);
+    /* Scale up logo on hover */
+}
+
+.nav-list {
+    list-style: none;
+    display: flex;
+    transition: all 0.3s ease;
+    justify-content: end;
+    /* Center items */
+    flex-grow: 1;
+    /* Allow the list to grow */
+}
+
+.nav-list li {
+    margin: 0 1rem;
+    position: relative;
+    /* Positioning for pseudo-elements */
+}
+
+.nav-list a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    /* Smooth color transition */
+}
+
+.nav-list a:hover {
+    color: #ffcc00;
+    /* Change link color on hover */
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    /* Transition for menu toggle */
+}
+
+.bar {
+    height: 3px;
+    width: 25px;
+    background-color: white;
+    margin: 3px 0;
+    transition: all 0.3s ease;
+}
+
+@media screen and (max-width: 768px) {
+    .nav-list {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        /* Height of navbar */
+        left: 0;
+        background-color: #333;
+        opacity: 0;
+        /* Start hidden */
+        transform: translateY(-20px);
+        /* Start slightly above */
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        /* Longer transition for smoother effect */
+        align-items: center;
+        /* Center items in dropdown */
+    }
+
+    .nav-list.active {
+        display: flex;
+        opacity: 1;
+        /* Show on active */
+        transform: translateY(0);
+        /* Move into place */
+    }
+
+    .menu-toggle {
+        display: flex;
+        /* Show hamburger menu */
+    }
+
+    /* Animation for the hamburger icon */
+    .menu-toggle.active .bar:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+        /* Middle bar disappears */
+    }
+
+    .menu-toggle.active .bar:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .nav-list li {
+        opacity: 0;
+        /* Start hidden */
+        transform: translateY(-10px);
+        /* Start slightly above */
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        /* Longer transition for smoother effect */
+    }
+
+    .nav-list.active li {
+        opacity: 1;
+        /* Fade in */
+        transform: translateY(0);
+        /* Move into place */
+        transition-delay: calc(0.1s * var(--i));
+        /* Stagger the transitions */
+    }
+
+    .nav-list li {
+        margin: 1rem 0;
+        /* Add vertical margin for dropdown items */
+    }
+}
