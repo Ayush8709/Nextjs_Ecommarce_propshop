@@ -1,54 +1,67 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import { NextResponse } from "next/server";
 import User from "@/backends/schema/userSchema";
 import myDb from "@/backends/utils/db";
+
 const jwt_token = process.env.jwt_token;
 
 export async function POST(NextRequest) {
     try {
-        myDb();
-        console.log("the log is", process.env.SECRET_KEY)
-        const { email, password } = await NextRequest.json()
+        await myDb(); // Ensure to await if it returns a promise
+
+        const { email, password } = await NextRequest.json();
 
         if (!email || !password) {
             return NextResponse.json({
                 success: false,
-                message: 'email or passord enter'
-            }, { status: 400 })
+                message: 'Email or password must be provided'
+            }, { status: 400 });
         }
 
-        //chek User
-        const user = await User.findOne({ email })
+        // Check User
+        const user = await User.findOne({ email });
+
         if (!user) {
             return NextResponse.json({
                 success: false,
-                message: 'invalid User'
-            }, { status: 400 })
+                message: 'Invalid user'
+            }, { status: 400 });
         }
 
-        
+        const isAdmin = user.isAdmin;
 
-        //token
+        // Create token
         const token = jwt.sign({ id: user._id }, jwt_token, {
             expiresIn: "7d"
-        }) // user._id is coming from datbase id
+        });
 
         const response = NextResponse.json({
             status: true,
-            message: "Login succesfull",
-            token
-        }, { status: 201 })
+            message: "Login successful",
+            token,
+            isAdmin
+        }, { status: 201 });
 
+        // Set cookies for token and isAdmin
         response.cookies.set('token', token, {
             httpOnly: true,
-        })
-        return response
+            maxAge: 60 * 60 * 24 * 7, // 7 days
+            path: '/' 
+        });
+
+        response.cookies.set('isAdmin', isAdmin ? 'true' : 'false', {
+            httpOnly: true,
+            maxAge: 60 * 60 * 24 * 7, // 7 days
+            path: '/' 
+        });
+
+        return response;
 
     } catch (error) {
         return NextResponse.json({
             success: false,
-            message: "Login api not working",
-            error
-        }, { status: 500 })
+            message: "Login API not working",
+            error: error.message 
+        }, { status: 500 });
     }
 }
