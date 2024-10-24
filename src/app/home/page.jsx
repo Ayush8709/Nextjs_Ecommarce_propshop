@@ -4,19 +4,21 @@ import Loading from '../loading';
 import Link from 'next/link';
 import { listProducts } from '@/redux/slice/productSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { FaRegStar } from "react-icons/fa";
+import Rating from '@/myComponents/Rating/Rating';
 
 const Page = () => {
 
     const dispatch = useDispatch()
-    
+
     const allProducts = useSelector(state => state.product);
-    const {products, error, loading}= allProducts
+    const { products, error, loading } = allProducts
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(listProducts())
-    },[dispatch])
+    }, [dispatch])
 
-   
+
 
     if (loading) {
         return <div className="text-center"><Loading /></div>;
@@ -33,7 +35,7 @@ const Page = () => {
                 {!products.myAllData ? (
                     <p className="text-center col-span-full">No products available</p>
                 ) : (
-                        products.myAllData.map((product) => (
+                    products.myAllData.map((product) => (
                         <div key={product._id} className="max-w-sm mx-auto p-4">
                             <Link href={`/home/${product._id}`}>
                                 <div className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer">
@@ -43,8 +45,12 @@ const Page = () => {
                                         alt={product.title}
                                     />
                                     <div className="p-4">
-                                        <h2 className="text-lg font-bold mb-2">{product.title}</h2>
-                                        <h3 className="text-lg font-bold mb-2">{product.category}</h3>
+                                        <h2 className="text-lg font-bold mb-2">{product.name}</h2>
+                                        <div className='flex'>
+                                            <span className='mr-2'>{product.rating} </span>
+                                            <Rating value={product.rating} text={`${product.numReviews} reviews`} color='red' />
+                                        </div>
+
                                         <p className="text-gray-700 mb-4">
                                             {product.description.substring(0, 120)}...
                                         </p>

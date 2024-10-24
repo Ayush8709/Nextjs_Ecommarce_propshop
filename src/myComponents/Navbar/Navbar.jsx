@@ -4,6 +4,10 @@ import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { TiArrowSortedDown } from "react-icons/ti";
+import { FaUser } from "react-icons/fa";
+import { IoMdHome } from "react-icons/io";
+import { IoCartOutline } from "react-icons/io5";
 
 const App = () => {
     const router = useRouter();
@@ -70,16 +74,19 @@ const App = () => {
                     <span className="bar"></span>
                 </div>
                 <ul className={`nav-list ${isOpen ? 'active' : ''}`}>
-                    <li><Link href="/" onClick={closeMenu} className="nav-link">Home</Link></li>
+                    <li><Link href="/" onClick={closeMenu} className="nav-link flex"><span className='pr-1 text-lg mt-[4px]'><IoMdHome /></span> Home</Link></li>
                     {!isAuthenticated ? (
-                        <li><Link href="/login" onClick={closeMenu} className="nav-link">Login</Link></li>
+                        <li><Link href="/login" onClick={closeMenu} className="nav-link flex"><span className='pr-1 mt-[4px]'><FaUser /></span> Login</Link></li>
                     ) : (
                         <>
-                            <li><Link href="/cart" onClick={closeMenu} className="nav-link">Cart</Link></li>
+                                <li><Link href="/cart" onClick={closeMenu} className="nav-link flex"><span className='pr-1 text-lg mt-[4px]'><IoCartOutline /></span> Cart</Link></li>
                             <li className="relative">
-                                <button onClick={() => setUserDropdownOpen(!userDropdownOpen)} className="nav-link rounded">
-                                    User: {userEmail}
-                                </button>
+                                <div >
+                                    <button onClick={() => setUserDropdownOpen(!userDropdownOpen)} className="nav-link rounded flex">
+                                        User: {userEmail}<span className='mt-[6px]'><TiArrowSortedDown /></span>
+                                    </button>
+
+                                </div>
                                 {userDropdownOpen && (
                                     <div className="absolute right-0 mt-2 w-48 bg-black text-white shadow-lg rounded-md">
                                         <Link href="/profile" className="block px-4 py-2 hover:bg-gray-700" onClick={closeMenu}>Profile</Link>
@@ -92,8 +99,8 @@ const App = () => {
                     )}
                     {isAdmin && (
                         <li className="relative">
-                            <button onClick={() => setAdminDropdownOpen(!adminDropdownOpen)} className="nav-link rounded">
-                                Admin: {userEmail}
+                            <button onClick={() => setAdminDropdownOpen(!adminDropdownOpen)} className="nav-link rounded flex">
+                                Admin: {userEmail} <span className='mt-[6px]'><TiArrowSortedDown /></span>
                             </button>
                             {adminDropdownOpen && (
                                 <div className="absolute right-0 mt-2 w-48 bg-black text-white shadow-lg rounded-md">
